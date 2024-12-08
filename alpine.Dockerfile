@@ -13,11 +13,8 @@ RUN yarn install --frozen-lockfile && yarn cache clean
 # Salin sisa kode aplikasi ke dalam kontainer
 COPY . .
 
-# Membuat direktori unggahan
-RUN mkdir -p /app/uploads
-
-# Membangun aplikasi
-RUN yarn build
+# Membuat direktori unggahan && Membangun aplikasi
+RUN mkdir -p /app/uploads && yarn build
 
 # Ekspos port 3000 agar aplikasi dapat mendengarkan
 EXPOSE 3000
