@@ -3,8 +3,6 @@ services:
     image: project/warung-api:1.0.0-production
     container_name: warung-api
     restart: always
-    networks:
-      - dockernet
     ports:
       - 3000:3000
     volumes:
