@@ -55,18 +55,12 @@ abstract class BaseController {
   responseAccepted(
     res: Response,
     data: any,
-    meta: any,
-    message?: string,
+    meta: any = { status: HttpStatus.ACCEPTED },
+    message: string = 'Data has been accepted.',
   ): Response {
     return res
       .status(HttpStatus.ACCEPTED)
-      .send(
-        ResponseDto.result(
-          data,
-          meta === undefined ? { status: 'OK' } : meta,
-          message === undefined ? 'Data has been found.' : message,
-        ),
-      );
+      .send(ResponseDto.result(data, meta, message));
   }
 
   responseOk<T>(
@@ -76,16 +70,15 @@ abstract class BaseController {
     message?: string,
   ): Response;
   responseOk<T, U>(res: Response, data: T, meta: U, message?: string): Response;
-  responseOk(res: Response, data: any, meta: any, message?: string): Response {
+  responseOk(
+    res: Response,
+    data: any,
+    meta: any = { status: HttpStatus.OK },
+    message: string = 'Data has been found.',
+  ): Response {
     return res
       .status(HttpStatus.OK)
-      .send(
-        ResponseDto.result(
-          data,
-          meta === undefined ? { status: 'OK' } : meta,
-          message === undefined ? 'Data has been found.' : message,
-        ),
-      );
+      .send(ResponseDto.result(data, meta, message));
   }
 
   responseCreated<T>(
@@ -103,18 +96,12 @@ abstract class BaseController {
   responseCreated(
     res: Response,
     data: any,
-    meta: any,
-    message: string,
+    meta: any = { status: HttpStatus.CREATED },
+    message: string = 'Data has been created.',
   ): Response {
     return res
       .status(HttpStatus.CREATED)
-      .send(
-        ResponseDto.result(
-          data,
-          meta === undefined ? { status: 'OK' } : meta,
-          message === undefined ? 'Data has been created.' : message,
-        ),
-      );
+      .send(ResponseDto.result(data, meta, message));
   }
 
   responseNoContent(res: Response) {
@@ -179,7 +166,7 @@ abstract class BaseController {
 
   checkPresent<T>(object: T) {
     if (object === null || object === undefined) {
-      throw new BadRequestError('Some requirements not found', [object]);
+      throw new BadRequestError('Some requirements not found.', [object]);
     }
   }
 }
