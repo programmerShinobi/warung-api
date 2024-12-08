@@ -6,18 +6,13 @@ import { BadRequestException } from '@nestjs/common';
 import { Request } from 'express';
 import { format } from 'date-fns-tz';
 import { DateConfig } from './date.config';
+import * as dotenv from 'dotenv';
+
+dotenv.config({ path: `${process.cwd()}/.env` });
 
 // Konfigurasi multer
 export const multerConfig = {
   dest: process.env.UPLOAD_LOCATION,
-};
-
-// Regex karakter yang diizinkan
-const allowedCharsRegex = /^[\w\s./|:-]+$/;
-
-// Berfungsi untuk mengekstrak karakter unik yang dilarang
-const findDisallowedChars = (input: string): string => {
-  return [...new Set(input.replace(/[\w\s./|:-]/g, ''))].join('');
 };
 
 // Opsi pengunggahan multer
@@ -62,33 +57,7 @@ export const multerOptions = {
       const actualSeconds = date.getUTCSeconds();
       const actualMilliseconds = date.getUTCMilliseconds();
 
-      const customerName = req?.body?.customerName
-        ? String(req?.body?.customerName)
-        : undefined;
-
-      const configName = req?.body?.configName
-        ? String(req?.body?.configName)
-        : undefined;
-
-      // Validation customerName & configName
       const errors = [];
-      if (!customerName) errors.push(`customerName should not be empty`);
-      if (!configName) errors.push(`configName should not be empty`);
-
-      // Check for disallowed characters
-      if (customerName && !allowedCharsRegex.test(customerName)) {
-        const disallowedChars = findDisallowedChars(customerName);
-        errors.push(
-          `customerName contains disallowed characters: ${disallowedChars}`,
-        );
-      }
-
-      if (configName && !allowedCharsRegex.test(configName)) {
-        const disallowedChars = findDisallowedChars(configName);
-        errors.push(
-          `configName contains disallowed characters: ${disallowedChars}`,
-        );
-      }
 
       if (errors.length > 0) {
         cb(new BadRequestException(errors), false);
@@ -96,10 +65,6 @@ export const multerOptions = {
       }
 
       const uploadedFileNameWithActualTime =
-        customerName +
-        '-' +
-        configName +
-        '-' +
         creationDateFormatted +
         '-T' +
         actualHours +
