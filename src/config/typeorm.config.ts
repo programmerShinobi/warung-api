@@ -1,18 +1,22 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
+import { DataSource } from 'typeorm';
+import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 
 dotenv.config();
 
 /**
  * Konfigurasi TypeORM menggunakan environment variables.
  */
-export const typeOrmConfig: TypeOrmModuleOptions = {
+export const configs: PostgresConnectionOptions = {
   type: 'postgres',
-  host: process.env.DATABASE_HOST,
-  port: Number(process.env.DATABASE_PORT),
-  username: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE_NAME,
-  entities: [__dirname + '/../**/*.entity.{js,ts}'],
-  synchronize: true, // Jangan aktifkan di produksi
+  url: String(process.env.DATABASE_URL),
+  entities: [__dirname + '/../modules/entities/**/*.entity.{ts,js}'],
+  migrations: [__dirname + '/../modules/database/migrations/*.{ts,js}'],
+  dropSchema: false,
+  synchronize: false, // Set ke false karena kita menggunakan migrasi
+  logging: true, // Aktifkan log untuk debugging
 };
+
+const dataSource = new DataSource(configs);
+
+export default dataSource;
