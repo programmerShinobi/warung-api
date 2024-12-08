@@ -1,0 +1,35 @@
+services:
+  warung-api:
+    image: project/warung-api:1.0.0-development
+    container_name: warung-api
+    restart: always
+    networks:
+      - dockernet
+    ports:
+      - 3000:3000
+    volumes:
+      - upload_excel:/app/uploads/
+      - .env:/app/.env
+    environment:
+      # Node Environment (prod)
+      NODE_ENV: prod
+
+      # Konfigurasi Nama Aplikasi
+      APPLICATION_NAME: Warung-API
+
+      # Konfigurasi Port Aplikasi
+      APPLICATION_PORT: 3000
+
+      # Konfigurasi Database
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nest-series
+
+      # Ukuran Maksimal File Upload (dalam byte)
+      MAX_FILE_SIZE: 10000000
+
+      # Lokasi Folder Penyimpanan File Upload
+      UPLOAD_LOCATION: ./uploads
+
+
+volumes:
+  upload_excel:
+    driver: local
