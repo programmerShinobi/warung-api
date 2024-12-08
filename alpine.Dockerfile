@@ -22,4 +22,4 @@ EXPOSE 3000
 # Mengatur perintah untuk memulai aplikasi
 RUN yarn typeorm-ts-node-commonjs -d src/config/typeorm.config.ts migration:run
 RUN yarn build
-ENTRYPOINT ["yarn", "start"]
+ENTRYPOINT ["yarn", "start:prod"]
