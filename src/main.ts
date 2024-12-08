@@ -15,17 +15,21 @@ declare const module: any;
 async function bootstrap() {
   Events.setMaxListeners(1500);
 
+  const nodeEnvironment = process.env.NODE_ENV;
+  const applicationName = process.env.APPLICATION_NAME;
+  const applicationPort = Number(process.env.APPLICATION_PORT) || 3000;
+  const applocationVersion = process.env.npm_package_version;
+
   const app = await NestFactory.create(AppModule, {
     logger:
-      process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'dev'
+      nodeEnvironment === 'prod' || nodeEnvironment === 'dev'
         ? ['error', 'warn', 'log']
         : ['error', 'warn', 'debug', 'log', 'verbose'],
   });
 
   const log = new Logger(bootstrap.name);
-  const PORT = Number(process.env.APPLICATION_PORT) || 3000;
 
-  // VMemvalidasi aliran masukan permintaan
+  // Memvalidasi aliran masukan permintaan
   app.useGlobalPipes(new ValidationPipe());
 
   // Pembuatan versi
@@ -34,7 +38,7 @@ async function bootstrap() {
   });
 
   // Connect to API
-  if (process.env.NODE_ENV !== 'prod') {
+  if (nodeEnvironment !== 'prod') {
     app.enableCors();
   }
 
@@ -43,22 +47,22 @@ async function bootstrap() {
 
   // Konfigurasi Swagger
   const options = new DocumentBuilder()
-    .setTitle(process.env.APPLICATION_NAME)
+    .setTitle(applicationName)
     .setDescription('API documentation for Warung convenience store')
-    .setVersion('1.0')
+    .setVersion(applocationVersion)
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document); // Dokumentasi Swagger tersedia di "<URL>/api"
 
-  await app.listen(PORT);
+  await app.listen(applicationPort);
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
 
   log.log(
-    `${process.env.APPLICATION_NAME} (${process.env.npm_package_version}) start on port ${PORT}`,
+    `${applicationName} (${applocationVersion}) start on port ${applicationPort}`,
   );
 
   showBanner();
@@ -92,6 +96,10 @@ function showBanner(): void {
         return;
       }
 
+      const nodeEnvironment = process.env.NODE_ENV;
+      const applicationPort = Number(process.env.APPLICATION_PORT) || 3000;
+      const applocationVersion = process.env.npm_package_version || 'N/A';
+
       let borderMaxLength = 0;
 
       console.log('\n' + data);
@@ -100,27 +108,21 @@ function showBanner(): void {
       };
 
       console.log(`\nApplication Info`);
-      const versionLine = formatInfo(
-        'Version',
-        process.env.npm_package_version || 'N/A',
-      );
-      const portLine = formatInfo(
-        'Port',
-        process.env.APPLICATION_PORT || 'N/A',
-      );
+      const versionLine = formatInfo('Version', applocationVersion);
+      const portLine = formatInfo('Port', applicationPort.toString());
       const nodeEnvLine = formatInfo(
         'Node',
-        process.env.NODE_ENV === 'prod'
+        nodeEnvironment === 'prod'
           ? 'Production'
-          : process.env.NODE_ENV === 'dev'
+          : nodeEnvironment === 'dev'
             ? 'Development'
-            : process.env.NODE_ENV === 'local'
+            : nodeEnvironment === 'local'
               ? 'Local'
               : 'N/A',
       );
       const corsLine = formatInfo(
         'CORS',
-        process.env.NODE_ENV !== 'prod' ? 'Enable' : 'Disable',
+        nodeEnvironment !== 'prod' ? 'Enable' : 'Disable',
       );
 
       console.log(nodeEnvLine);
