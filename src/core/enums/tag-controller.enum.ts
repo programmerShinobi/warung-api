@@ -1,3 +1,3 @@
 export enum TagController {
-  PRODUCTS = 'Products',
+  PRODUCT = 'Product',
 }
