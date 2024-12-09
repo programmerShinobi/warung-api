@@ -1,6 +1,6 @@
 services:
   warung-api:
-    image: project/warung-api:1.0.1-production
+    image: project/warung-api:1.1.1-production
     container_name: warung-api
     restart: always
     ports:
