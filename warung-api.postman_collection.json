@@ -1,0 +1,273 @@
+{
+	"info": {
+		"_postman_id": "29c483c5-1ff0-47ac-a1d6-8bddeb34479e",
+		"name": "warung-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24896527",
+		"_collection_link": "https://www.postman.com/shinobi-developer/workspace/warung-api/collection/24896527-29c483c5-1ff0-47ac-a1d6-8bddeb34479e?action=share&source=collection_link&creator=24896527"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "Upload file with products",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/home/faqih/Downloads/ProductsData_100_Categories.xlsx"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{LOCAL}}/v1/product/upload",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"product",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a new product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryId\": 3,\n  \"categoryName\": \"Electronics\",\n  \"sku\": \"LG12345\",\n  \"name\": \"LG Full HD Smart TV 32LM635BPTB\",\n  \"description\": \"32-inch Full HD Smart TV with webOS and AI ThinQ. Perfect for home entertainment.\",\n  \"weight\": 5.8,\n  \"width\": 73.8,\n  \"length\": 43.3,\n  \"height\": 9.5,\n  \"image\": \"https://www.lg.com/id/images/tvs/md06143051/gallery/desktop-01.jpg\",\n  \"harga\": 2999000\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/v1/product",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find all product",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/v1/product",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"product"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "201",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "appliances",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check product details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/v1/product/5",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"product",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a product",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"categoryId\": 3,\n  \"categoryName\": \"Electronics\",\n  \"sku\": \"LG12345\",\n  \"name\": \"LG Full HD Smart TV 32LM635BPTB\",\n  \"description\": \"32-inch Full HD Smart TV with webOS and AI ThinQ. Perfect for home entertainment.\",\n  \"weight\": 5.8,\n  \"width\": 73.8,\n  \"length\": 43.3,\n  \"height\": 9.5,\n  \"image\": \"https://www.lg.com/id/images/tvs/md06143051/gallery/desktop-01.jpg\",\n  \"harga\": 2999000\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/v1/product/3",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"product",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a product",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/v1/product/1",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkouts",
+			"item": [
+				{
+					"name": "Create checkout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 3,\n  \"items\": [\n    {\n      \"productId\": 3,\n      \"quantity\": 3\n    },\n    {\n      \"productId\": 7,\n      \"quantity\": 2\n    },\n    {\n      \"productId\": 9,\n      \"quantity\": 1\n    }\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{LOCAL}}/v1/checkout",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm checkout",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/v1/checkout/2/confirm",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"checkout",
+								"2",
+								"confirm"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find checkout by user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{LOCAL}}/v1/checkout/26",
+							"host": [
+								"{{LOCAL}}"
+							],
+							"path": [
+								"v1",
+								"checkout",
+								"26"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "LOCAL",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}
