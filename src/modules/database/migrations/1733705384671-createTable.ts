@@ -1,8 +1,6 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 
-export class CreateProductsAndAuditLogs1733647478877
-  implements MigrationInterface
-{
+export class CreateTable1733705384671 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     // Create 'products' table
     await queryRunner.createTable(
@@ -69,6 +67,16 @@ export class CreateProductsAndAuditLogs1733647478877
           { name: 'operation', type: 'varchar', isNullable: false },
           { name: 'changes', type: 'text', isNullable: false },
           {
+            name: 'userId',
+            type: 'int',
+            isNullable: true,
+          },
+          {
+            name: 'metadata',
+            type: 'jsonb',
+            isNullable: true,
+          },
+          {
             name: 'timestamp',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
@@ -76,9 +84,60 @@ export class CreateProductsAndAuditLogs1733647478877
         ],
       }),
     );
+
+    // Create 'checkouts' table
+    await queryRunner.createTable(
+      new Table({
+        name: 'checkouts',
+        columns: [
+          {
+            name: 'id',
+            type: 'int',
+            isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
+          },
+          {
+            name: 'userId',
+            type: 'int',
+            isNullable: false,
+          },
+          {
+            name: 'items',
+            type: 'jsonb',
+            isNullable: false,
+          },
+          {
+            name: 'totalPrice',
+            type: 'numeric',
+            precision: 10,
+            scale: 2,
+            isNullable: false,
+          },
+          {
+            name: 'status',
+            type: 'varchar',
+            isNullable: false,
+            default: `'pending'`,
+          },
+          {
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
+          },
+          {
+            name: 'updatedAt',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            onUpdate: 'CURRENT_TIMESTAMP',
+          },
+        ],
+      }),
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable('checkouts');
     await queryRunner.dropTable('audit_logs');
     await queryRunner.dropTable('products');
   }
