@@ -6,10 +6,10 @@ import {
 } from 'typeorm';
 
 /**
- * Entity untuk log yang merepresentasikan tabel 'audit-logs'.
+ * Entity untuk log yang merepresentasikan tabel 'audit-log'.
  */
-@Entity()
-export class AuditLogs {
+@Entity('audit_logs')
+export class AuditLog {
   @PrimaryGeneratedColumn()
   id: number;
 

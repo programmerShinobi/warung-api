@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuditLogs } from './entities/audit-log.entity';
+import { AuditLog } from './entities/audit-log.entity';
 import { Repository } from 'typeorm';
 import { BaseService } from 'src/core/base.service';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
@@ -13,8 +13,8 @@ export class AuditLogService
   implements AuditLogServiceInterface
 {
   constructor(
-    @InjectRepository(AuditLogs)
-    private readonly auditLogRepository: Repository<AuditLogs>,
+    @InjectRepository(AuditLog)
+    private readonly auditLogRepository: Repository<AuditLog>,
   ) {
     super(AuditLogService.name);
   }

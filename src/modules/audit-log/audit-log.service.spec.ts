@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuditLogService } from './audit-log.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AuditLogs } from './entities/audit-log.entity';
+import { AuditLog } from './entities/audit-log.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { of, throwError } from 'rxjs';
 import { TableNameEnum } from 'src/core/enums/table-name.enum';
@@ -11,7 +11,7 @@ import { OperatorNameEnum } from 'src/core/enums/operator-name.enum';
 
 describe(AuditLogService.name, () => {
   let service: AuditLogService;
-  let repository: Repository<AuditLogs>;
+  let repository: Repository<AuditLog>;
 
   // Mock the audit log repository
   const mockAuditLogRepository = {
@@ -24,15 +24,15 @@ describe(AuditLogService.name, () => {
       providers: [
         AuditLogService,
         {
-          provide: getRepositoryToken(AuditLogs),
+          provide: getRepositoryToken(AuditLog),
           useValue: mockAuditLogRepository,
         },
       ],
     }).compile();
 
     service = module.get<AuditLogService>(AuditLogService);
-    repository = module.get<Repository<AuditLogs>>(
-      getRepositoryToken(AuditLogs),
+    repository = module.get<Repository<AuditLog>>(
+      getRepositoryToken(AuditLog),
     );
   });
 
