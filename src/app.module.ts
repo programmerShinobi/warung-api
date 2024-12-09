@@ -1,10 +1,12 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Products } from './modules/product/entities/product.entity';
+import { Product } from './modules/product/entities/product.entity';
 import { ProductModule } from './modules/product/product.module';
-import { AuditLogs } from './modules/audit-log/entities/audit-log.entity';
+import { AuditLog } from './modules/audit-log/entities/audit-log.entity';
 import { AuditLogModule } from './modules/audit-log/audit-log.module';
+import { Checkout } from './modules/checkout/entities/checkout.entity';
+import { CheckoutModule } from './modules/checkout/checkout.module';
 
 @Module({
   imports: [
@@ -14,12 +16,13 @@ import { AuditLogModule } from './modules/audit-log/audit-log.module';
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
         url: configService.get('DATABASE_URL'),
-        entities: [Products, AuditLogs],
+        entities: [Product, AuditLog, Checkout],
         synchronize: true,
       }),
     }),
     ProductModule,
     AuditLogModule,
+    CheckoutModule,
   ],
 })
 export class AppModule {}
