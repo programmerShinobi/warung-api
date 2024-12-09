@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BaseService } from 'src/core/base.service';
 import { ILike, Repository } from 'typeorm';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
-import { Products } from '../entities/product.entity';
+import { Product } from '../entities/product.entity';
 import { AuditLogService } from 'src/modules/audit-log/audit-log.service';
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { PaginationResultDto } from '../dtos/pagination-result.dto';
@@ -36,8 +36,8 @@ export class ProductService
   implements ProductServiceInterface
 {
   constructor(
-    @InjectRepository(Products)
-    private readonly productRepository: Repository<Products>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
     private readonly auditLogService: AuditLogService,
     private readonly excelService: ExcelProductService,
   ) {
@@ -104,11 +104,11 @@ export class ProductService
   /**
    * Create Product
    * @param createProductDto CreateProductDto
-   * @returns Promise<Products>
+   * @returns Promise<Product>
    */
-  async createProduct(createProductDto: CreateProductDto): Promise<Products> {
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
     try {
-      let data: Products = undefined;
+      let data: Product = undefined;
 
       const $data = of(this.productRepository.create(createProductDto)).pipe(
         catchError((error) => {
@@ -120,7 +120,6 @@ export class ProductService
               throw new ExceptionsHandler(error);
             }),
             switchMap((savedProduct) => {
-              data = savedProduct;
               return from(
                 this.auditLogService.createAuditLog(
                   TableNameEnum.PRODUCTS,
@@ -131,6 +130,10 @@ export class ProductService
                 catchError(() => {
                   data = undefined;
                   return from(this.productRepository.delete(product.id));
+                }),
+                switchMap(() => {
+                  data = savedProduct;
+                  return of(null);
                 }),
               );
             }),
@@ -147,19 +150,19 @@ export class ProductService
   }
 
   /**
-   * Find Products
+   * Find Product
    * @param options {
    *          page: number;
    *          limit: number;
    *          search: string;
    *        }
-   * @returns Promise<{ data: Products[]; total: number }>
+   * @returns Promise<{ data: Product[]; total: number }>
    */
   async findProducts(options: {
     page: number;
     limit: number;
     search?: string;
-  }): Promise<PaginationResultDto<Products>> {
+  }): Promise<PaginationResultDto<Product>> {
     try {
       const { page, limit, search } = options;
 
@@ -192,7 +195,7 @@ export class ProductService
         }),
         switchMap((products) => {
           if (products.length === 0)
-            throw new NotFoundException('Products not found.');
+            throw new NotFoundException('Product not found.');
 
           return from(products).pipe(
             concatMap((product) => {
@@ -213,7 +216,7 @@ export class ProductService
       await lastValueFrom($data);
 
       const totalItems = data.length;
-      if (totalItems === 0) throw new NotFoundException('Products not found.');
+      if (totalItems === 0) throw new NotFoundException('Product not found.');
 
       return {
         data,
@@ -234,9 +237,9 @@ export class ProductService
   /**
    * Product Details
    * @param id number
-   * @returns Promise<Products>
+   * @returns Promise<Product>
    */
-  async productDetails(id: number): Promise<Products> {
+  async productDetails(id: number): Promise<Product> {
     try {
       const $data = from(
         this.productRepository.findOne({ where: { id } }),
@@ -260,14 +263,14 @@ export class ProductService
    * Update Product
    * @param id number
    * @param updateProductDto Partial<CreateProductDto>
-   * @returns Promise<Products>
+   * @returns Promise<Product>
    */
   async updateProduct(
     id: number,
     updateProductDto: Partial<CreateProductDto>,
-  ): Promise<Products> {
+  ): Promise<Product> {
     try {
-      let data: Products = undefined;
+      let data: Product = undefined;
       const $data = from(this.productDetails(id)).pipe(
         catchError((error) => {
           throw new ExceptionsHandler(error);

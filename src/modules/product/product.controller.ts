@@ -257,7 +257,7 @@ export class ProductController extends BaseController implements ProductControll
    * @returns Promise<Response>
    */
   @Post('upload')
-  @ApiOperation({ summary: 'Handle File Upload (Products)' })
+  @ApiOperation({ summary: 'Handle File Upload (Product)' })
   @ApiBody({
     schema: {
       type: 'object',

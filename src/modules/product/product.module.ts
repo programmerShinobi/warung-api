@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Products } from './entities/product.entity';
+import { Product } from './entities/product.entity';
 import { ProductController } from './product.controller';
 import { AuditLogModule } from '../audit-log/audit-log.module';
 import { ProductService } from './services/product.service';
@@ -9,7 +9,7 @@ import { ProductProcessExcelToJsonBuilder } from './utils/product-process-excel-
 import { ReadExcelSheetProductBuilder } from './utils/read-excel-sheet-product-builder.util';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Products]), AuditLogModule],
+  imports: [TypeOrmModule.forFeature([Product]), AuditLogModule],
   providers: [
     ProductService,
     ExcelProductService,
@@ -17,5 +17,6 @@ import { ReadExcelSheetProductBuilder } from './utils/read-excel-sheet-product-b
     ReadExcelSheetProductBuilder,
   ],
   controllers: [ProductController],
+  exports: [ProductService],
 })
 export class ProductModule {}

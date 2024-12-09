@@ -3,8 +3,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 /**
  * Entity untuk produk yang merepresentasikan tabel 'products'.
  */
-@Entity()
-export class Products {
+@Entity('products')
+export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
