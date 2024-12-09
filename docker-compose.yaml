@@ -19,7 +19,7 @@ services:
       APPLICATION_PORT: 3000
 
       # Konfigurasi Database
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nest-series
+      DATABASE_URL: postgresql://postgres:postgres@postgres-db:5432/warung-db
 
       # Ukuran Maksimal File Upload (dalam byte)
       MAX_FILE_SIZE: 10000000
@@ -27,7 +27,21 @@ services:
       # Lokasi Folder Penyimpanan File Upload
       UPLOAD_LOCATION: ./uploads
 
+  postgres-db:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: warung-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   upload_excel:
+    driver: local
+  postgres_data:
     driver: local
