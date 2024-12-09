@@ -7,7 +7,6 @@ import { ReadExcelSheetProductBuilder } from '../utils/read-excel-sheet-product-
 import { ProductProcessExcelToJsonBuilder } from '../utils/product-process-excel-to-json-builder.util';
 import { MessagesInvalidDataError } from 'src/core/errors/invalid-data.error';
 import { SheetNameEnum } from 'src/core/enums/sheet-name.enum';
-import * as fs from 'fs-extra';
 import { ItemsProductDto } from '../dtos/items-product.dto';
 import { ProductSheetsDto } from '../dtos/product-sheet.dto';
 import { ReadProductSheetDto } from '../dtos/read-product-sheet.dto';
@@ -63,14 +62,6 @@ export class ExcelProductService
       this.logger.verbose({ result });
       return result;
     } catch (error) {
-      const filePath: string = req?.file?.path
-        ? String(req?.file?.path)
-        : undefined;
-
-      if (filePath) {
-        await fs.remove(filePath);
-      }
-
       if (error instanceof MessagesInvalidDataError) {
         const errorResponse = {
           status: 400,
