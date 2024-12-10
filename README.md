@@ -60,17 +60,21 @@ This update includes the **Checkout** functionality, which typically involves ad
 
 3. Create a `.env` file, then copy the contents from the `.env.example` file to the new `.env` file.
 
-4. Install Dependencies
+5.  Create Uploads Directory
+    ```bash
+    $ mkdir uploads
+
+6. Install Dependencies
     ```bash
     $ yarn install
     ```
 
-5. Set up PostgreSQL Database and Run Migrations
+7. Set up PostgreSQL Database and Run Migrations
     ```bash
     $ yarn run migration:run
     ```
 
-6. Run the Web Server:
+8. Run the Web Server:
     - For Development:
       ```bash
       $ yarn start
